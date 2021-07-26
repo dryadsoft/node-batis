@@ -8,8 +8,18 @@
   "types": "lib/index.d.ts",
   "description": "nodejs myBatis",
   "repository": "https://github.com/dryadsoft/node-batis.git",
+  "keywords": [
+    "node",
+    "myBatis",
+    "xml",
+    "mariadb",
+    "mysql"
+  ],
   "author": "dryadsoft <dryadsoft@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dryadsoft/node-batis/issues"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "CHOKIDAR_USEPOLLING=true ts-node src/index.ts",
