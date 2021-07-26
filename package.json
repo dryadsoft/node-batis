@@ -1,0 +1,28 @@
+{
+  "name": "node-batis",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "files": [
+    "lib/**/*"
+  ],
+  "types": "lib/index.d.ts",
+  "description": "nodejs myBatis",
+  "repository": "https://github.com/dryadsoft/node-batis.git",
+  "author": "dryadsoft <dryadsoft@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "dev": "CHOKIDAR_USEPOLLING=true ts-node src/index.ts",
+    "start": "node lib/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^16.4.2",
+    "@types/xml2js": "^0.4.9",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.2",
+    "xml2js": "^0.4.23"
+  }
+}

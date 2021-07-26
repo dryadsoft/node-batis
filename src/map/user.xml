@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mapper>
+	<select id="select_test1">
+		SELECT BASC_YY 
+          FROM TB_BASC_TERM
+		
+	</select>
+	<select id="select_test2">
+		SELECT * 
+          FROM TB_BASC_TERM
+		WHERE 1 = #{param}
+	</select>
+	<update id="update_test3">
+		SELECT BASC_YY 
+          FROM TB_BASC_TERM
+	</update>
+	<update id="update_test5">
+		SELECT BASC_YY 
+          FROM TB_BASC_TERM
+	</update>
+</mapper>
