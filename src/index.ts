@@ -1,5 +1,6 @@
 import chokidar from "chokidar";
 import { promises as pfs } from "fs";
+import path from "path";
 import { parseString } from "xml2js";
 
 /**
@@ -49,8 +50,8 @@ class NodeBatis {
    */
   private constructor() {}
 
-  public init(path: string, isWatch?: boolean) {
-    this.xmlPath = path;
+  public init(localPath: string, isWatch?: boolean) {
+    this.xmlPath = localPath;
     isWatch && this.watch();
   }
 
@@ -65,27 +66,27 @@ class NodeBatis {
    * getPath
    */
   private getPath(fileName: string) {
-    return `${this.xmlPath}/${fileName}.xml`;
+    return path.join(this.xmlPath, `${fileName}.xml`);
   }
   /**
    * getExts
    */
-  private getExts(path: string) {
-    return path.substring(path.length - 4);
+  private getExts(localPath: string) {
+    return path.parse(localPath).ext;
   }
   /**
    * getFileName
    */
-  private getFileName(path: string) {
-    return path.substring(path.lastIndexOf("/") + 1).replace(".xml", "");
+  private getFileName(localPath: string) {
+    return path.parse(localPath).name;
   }
   /**
    * async getMapperXml
    */
-  private async getMapperXml(path: string) {
+  private async getMapperXml(localPath: string) {
     // map파일을 읽어온다.
     try {
-      const xmlData = await pfs.readFile(path, "utf8");
+      const xmlData = await pfs.readFile(localPath, "utf8");
       const data = await this.getXml2Json(xmlData);
       return data;
     } catch (err) {
@@ -96,12 +97,12 @@ class NodeBatis {
   /**
    * async getWatchXmlData
    */
-  private async getWatchXmlData(path: string) {
-    const ext = this.getExts(path);
+  private async getWatchXmlData(localPath: string) {
+    const ext = this.getExts(localPath);
     if (ext === ".xml") {
-      const fileName = this.getFileName(path);
+      const fileName = this.getFileName(localPath);
       // console.log(fileName);
-      const data = await this.getMapperXml(path);
+      const data = await this.getMapperXml(localPath);
       // console.log(data);
       const mapperKeys = <mapperType[]>Object.keys(data.mapper);
       const mapperSqlById = mapperKeys.reduce((acc: any, cur) => {
@@ -126,10 +127,10 @@ class NodeBatis {
   /**
    * async getWatchXmlData
    */
-  private deleteWatchXmlData(path: string) {
-    const ext = this.getExts(path);
+  private deleteWatchXmlData(localPath: string) {
+    const ext = this.getExts(localPath);
     if (ext === ".xml") {
-      const fileName = this.getFileName(path);
+      const fileName = this.getFileName(localPath);
       delete this.mapperData[fileName];
       // console.log(this.mapperData);
     }
@@ -144,17 +145,17 @@ class NodeBatis {
       persistent: true,
     });
     watcher
-      .on("add", (path: string) => {
-        // console.log("add", path);
-        this.getWatchXmlData(path);
+      .on("add", (localPath: string) => {
+        // console.log("add", localPath);
+        this.getWatchXmlData(localPath);
       })
-      .on("change", (path: any) => {
-        // console.log("change", path);
-        this.getWatchXmlData(path);
+      .on("change", (localPath: any) => {
+        // console.log("change", localPath);
+        this.getWatchXmlData(localPath);
       })
-      .on("unlink", (path: any) => {
+      .on("unlink", (localPath: any) => {
         // console.log("unlink", path);
-        this.deleteWatchXmlData(path);
+        this.deleteWatchXmlData(localPath);
       });
   }
 
